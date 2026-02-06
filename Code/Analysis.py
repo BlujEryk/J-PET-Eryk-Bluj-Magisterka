@@ -1,6 +1,7 @@
 import time
 import re
 import matplotlib.pyplot as plt
+from pypdf import PdfReader, PdfWriter
 from Signal import *
 from Events_List import *
 from Histograms_Saver import *
@@ -46,14 +47,30 @@ def Event_regex(line):
     else:
         return False
 
+def Erase_pdfs():
+    writer = PdfWriter()
+    with open("../Results/Amplitudes_CH0.pdf", "wb") as f:
+        writer.write(f)
+    f.close()
+    with open("../Results/Amplitudes_CH1.pdf", "wb") as f:
+        writer.write(f)
+    f.close()
+    with open("../Results/Charges_CH0.pdf", "wb") as f:
+        writer.write(f)
+    f.close()
+    with open("../Results/Charges_CH1.pdf", "wb") as f:
+        writer.write(f)
+    f.close()
+
 
 def main():
     measurements_list = []
-    number_of_files = 2
+    number_of_files = 50
     for i in range(82, 91, 1):
         events_list = Events_List([])
         files_path = "../Data/"+str(i/2)+"V/wavecatcher_run1/wavecatcher_run1_Ascii.dat"
         for j in range(number_of_files):
+            print("[" + str(i-81) + "/9, " + str(j+1) + "/100]")
             current_path = Enumerate_files(j, files_path)
 
             with open(current_path, "r", encoding = "utf-8") as current_file:
@@ -102,10 +119,16 @@ def main():
         measurements_list.append(events_list)
         events_list = Events_List([])
 
+
+    Erase_pdfs()
     i = 41
     for measurement in measurements_list:
-        histograms_saver = Histograms_Saver(measurement, "Results for " + str(i) + " .pdf")
-        histograms_saver.Save_All_Histograms()
+        histograms_saver = Histograms_Saver(measurement, str(i) + "V")
+        histograms_saver.Amplitudes_CH0()
+        histograms_saver.Amplitudes_CH1()
+        histograms_saver.Charges_CH0()
+        histograms_saver.Charges_CH1()
         i = i + 0.5
+    os.remove("../Results/new_page.pdf")
     
 main()
