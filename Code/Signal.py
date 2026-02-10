@@ -1,10 +1,13 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 class Signal:
     
     def __init__(self, raw_waveform, sampling_time):
         self.raw_waveform = raw_waveform
         self.sampling_time = sampling_time
+
+        self.all_variables_computed = False
 
     def Compute_Baseline(self):
         self.baseline = np.sum(self.raw_waveform[:200])/200
@@ -60,11 +63,30 @@ class Signal:
                 break
             i = i + 1
 
-        self.signal_detection_time = self.rising_01_time
+        self.detection_time = self.rising_01_time
+
+    def Compute_First_Points_Over_Sigma(self):
+        i = 0
+        for value in self.waveform[self.amplitude_index::-1]:
+            if np.absolute(value) > self.standard_deviation:
+                self.start_value = value
+                self.start_index = self.amplitude_index - i
+                self.start_time = self.start_index*self.sampling_time
+                break
+            i = i + 1
+
+        i = 0
+        for value in self.waveform[self.amplitude_index:]:
+            if np.absolute(value) > self.standard_deviation:
+                self.stop_value = value
+                self.stop_index = self.amplitude_index + i
+                self.stop_time = self.stop_index*self.sampling_time
+                break
+            i = i + 1
 
     def Compute_Edges_Lenghts(self):
-        self.rising_lenght = self.rising_09_time - self.rising_01_time
-        self.falling_lenght = self.falling_01_time - self.falling_09_time
+            self.rising_lenght = self.rising_09_time - self.rising_01_time
+            self.falling_lenght = self.falling_01_time - self.falling_09_time
 
     def Compute_Time_Over_Threshold(self):
         self.time_over_threshold = self.falling_01_time - self.rising_01_time 
@@ -78,6 +100,9 @@ class Signal:
         self.Compute_Standard_Deviation()
         self.Compute_Amplitude()
         self.Compute_Edges()
+        self.Compute_First_Points_Over_Sigma()
         self.Compute_Edges_Lenghts()
         self.Compute_Time_Over_Threshold()
         self.Compute_Charge()
+        
+        self.all_variables_computed = True

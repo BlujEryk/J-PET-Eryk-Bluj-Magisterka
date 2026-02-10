@@ -61,11 +61,20 @@ def Erase_pdfs():
     with open("../Results/Charges_CH1.pdf", "wb") as f:
         writer.write(f)
     f.close()
+    with open("../Results/Charge_averages.pdf", "wb") as f:
+        writer.write(f)
+    f.close()
+    with open("../Results/Time_averages.pdf", "wb") as f:
+        writer.write(f)
+    f.close()
+    with open("../Results/Time_differences.pdf", "wb") as f:
+        writer.write(f)
+    f.close()
 
 
 def main():
     measurements_list = []
-    number_of_files = 50
+    number_of_files = 100
     for i in range(82, 91, 1):
         events_list = Events_List([])
         files_path = "../Data/"+str(i/2)+"V/wavecatcher_run1/wavecatcher_run1_Ascii.dat"
@@ -78,7 +87,7 @@ def main():
                 current_CH0_waveform = []
                 current_CH1_waveform = []
                 current_line = current_file.readline()
-                while 1:
+                while current_line:
                     current_sampling_time = Sampling_time_regex(current_line)
                     if  current_sampling_time:
                         break
@@ -95,13 +104,19 @@ def main():
                         current_line = current_file.readline()
                         current_CH0_waveform = [float(number) for number in current_line.split()]
                         current_CH0_signal = Signal(current_CH0_waveform, current_sampling_time)
-                        current_CH0_signal.Compute_All_Variables()
+                        try:
+                            current_CH0_signal.Compute_All_Variables()
+                        except:
+                            pass
                     elif Channel_regex(current_line) == "1":
                         current_line.strip()
                         current_line = current_file.readline()
                         current_CH1_waveform = [float(number) for number in current_line.split()]
                         current_CH1_signal = Signal(current_CH1_waveform, current_sampling_time)
-                        current_CH1_signal.Compute_All_Variables()
+                        try:
+                            current_CH1_signal.Compute_All_Variables()
+                        except:
+                            pass
                     else:
                         pass
 
@@ -128,6 +143,9 @@ def main():
         histograms_saver.Amplitudes_CH1()
         histograms_saver.Charges_CH0()
         histograms_saver.Charges_CH1()
+        histograms_saver.Charge_averages()
+        histograms_saver.Time_averages()
+        histograms_saver.Time_differences()
         i = i + 0.5
     os.remove("../Results/new_page.pdf")
     
