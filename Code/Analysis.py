@@ -5,6 +5,7 @@ from pypdf import PdfReader, PdfWriter
 from Signal import *
 from Events_List import *
 from Histograms_Saver import *
+from Compton_Graph_Saver import *
 
 
 def Enumerate_files(i, files_path):
@@ -47,34 +48,43 @@ def Event_regex(line):
     else:
         return False
 
+
 def Erase_pdfs():
     writer = PdfWriter()
-    with open("../Results/Amplitudes_CH0.pdf", "wb") as f:
+    with open("../Results/CH0 Amplitudes.pdf", "wb") as f:
         writer.write(f)
     f.close()
-    with open("../Results/Amplitudes_CH1.pdf", "wb") as f:
+    with open("../Results/CH1 Amplitudes.pdf", "wb") as f:
         writer.write(f)
     f.close()
-    with open("../Results/Charges_CH0.pdf", "wb") as f:
+    with open("../Results/CH0 Charges.pdf", "wb") as f:
         writer.write(f)
     f.close()
-    with open("../Results/Charges_CH1.pdf", "wb") as f:
+    with open("../Results/CH1 Charges.pdf", "wb") as f:
         writer.write(f)
     f.close()
-    with open("../Results/Charge_averages.pdf", "wb") as f:
+    with open("../Results/Charge averages.pdf", "wb") as f:
         writer.write(f)
     f.close()
-    with open("../Results/Time_averages.pdf", "wb") as f:
+    with open("../Results/Time averages.pdf", "wb") as f:
         writer.write(f)
     f.close()
-    with open("../Results/Time_differences.pdf", "wb") as f:
+    with open("../Results/Time differences.pdf", "wb") as f:
+        writer.write(f)
+    f.close()
+    with open("../Results/Compton Edges.pdf", "wb") as f:
+        writer.write(f)
+    f.close()
+    with open("../Results/Percentage Compton Edges.pdf", "wb") as f:
         writer.write(f)
     f.close()
 
 
 def main():
+    Erase_pdfs()
     measurements_list = []
-    number_of_files = 100
+    compton_values = []
+    number_of_files = 10
     for i in range(82, 91, 1):
         events_list = Events_List([])
         files_path = "../Data/"+str(i/2)+"V/wavecatcher_run1/wavecatcher_run1_Ascii.dat"
@@ -135,18 +145,19 @@ def main():
         events_list = Events_List([])
 
 
-    Erase_pdfs()
     i = 41
     for measurement in measurements_list:
         histograms_saver = Histograms_Saver(measurement, str(i) + "V")
-        histograms_saver.Amplitudes_CH0()
-        histograms_saver.Amplitudes_CH1()
-        histograms_saver.Charges_CH0()
-        histograms_saver.Charges_CH1()
+        compton_value = histograms_saver.Save_Compton_Type_Histograms()
+        compton_values.append([i] + compton_value)
         histograms_saver.Charge_averages()
         histograms_saver.Time_averages()
         histograms_saver.Time_differences()
         i = i + 0.5
+
+    compton_graph_saver = Compton_Graph_Saver(compton_values)
+    compton_graph_saver.Save_Compton_Graphs()
+
     os.remove("../Results/new_page.pdf")
     
 main()
