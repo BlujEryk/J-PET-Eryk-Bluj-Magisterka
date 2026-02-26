@@ -3,14 +3,16 @@
 This project is used to analyze data collected using a Caen digitizer DT5743. The analysis consists of:
 
   - Single signal parameters calculation
+  - Cuts based on signal shapes
   - Compton edge position calculation based on charge and amplitude histograms
+  - Cuts based on compton edge positions for charges
   - Calculation of the compton edge dependence factor on temperature / voltage
   - Energy and time resolution calculation
 
-## Signal parameters:
+## Signal Parameters:
 Every collected signal undergo the following procedure:
 1. Baseline calculation and signal correction
-2. ± σ<sub>200}</sub> region calculation
+2. ± σ<sub>200</sub> region calculation
 3. Amplitude value and position calculation
 4. Calculation of positions of 0.1 and 0.9 of amplitude value
 5. Rising and falling edge lenght calculation
@@ -21,18 +23,22 @@ The graph below shows an example of the collected signal:
 <p align="center">
   <img src = "Images/for_readme_1.png" width = "500">
 </p>
+
 Baseline **V<sub>B</sub>** is calculated as a aritmetic mean of first 200 voltage values. Then **V<sub>B</sub>** is substracted from every point in a signal. Thanks to that whole signal is shifted by **V<sub>B</sub>** upwards or downwards and the baseline of such corrected signal becomes 0.
 <p align="center">
   <img src = "Images/for_readme_2.png" width = "500">
 </p>
-In the next step **σ<sub>200</sub>}** standard devation of 200 first voltage values is calculated as shown above. **±σ<sub>200</sub>** region is treated as a noise region and is used later to find the signal detection time and to eliminate signals that are to noisy.
+
+In the next step **σ<sub>200</sub>** standard devation of 200 first voltage values is calculated as shown above. **±σ<sub>200</sub>** region is treated as a noise region and is used later to find the signal detection time and to eliminate signals that are to noisy.
 <p align="center">
   <img src = "Images/for_readme_3.png" width = "500">
 </p>
+
 Then the amplitude **A**  is determined as the maximum value of the signal and **T<sub>A</sub>** as its position. The amplitude values ​​of 0.1 and 0.9 are also calculated and then used to find the rising and falling edges lengths.
 <p align="center">
   <img src = "Images/for_readme_4.png" width = "500">
 </p>
+
 Based on that, iterating over subsequent signal points to the left (backwards) starting from **T<sub>A</sub>**, the **T<sub>RE</sub>** and **T<sub>RB</sub>** values ​​are found, respectively, as the position of the first encountered point smaller than 0.9**A** and the position of the last encountered point greater than 0.1**A**. Additionally, **T<sub>D</sub>** is also determined as the position of the last encountered point greater (in modulus) than **±σ<sub>200</sub>**. Similarly, by iterating to the right (forward) from **T<sub>A</sub>**, **T<sub>FB</sub>** and **T<sub>FE</sub>** are found, respectively as the position of the the first encountered point smaller than 0.9**A** and the position of the last encountered point greater than 0.1**A**. The individual **T** values ​​​​stands for:
 - **T<sub>A</sub>** -- Amplitude position
 (marked in green on the graph)
@@ -46,8 +52,23 @@ Based on that, iterating over subsequent signal points to the left (backwards) s
 Rising edge length **T<sub>R</sub>** is then calculated as **$T_{R} = T_{RE} - T_{RB}$** and analogously falling edge lenght **T<sub>F</sub>** is then calculated as **$T_{F} = T_{FE} - T_{FB}$**.
 Finally total charge **Q** is calculated as (integral over time) a sum of all voltage values in the signal multiplied by so called sampling time -- time between adjacent points on the graph which is recorded directly by the digitizer.
   
-  
-    
+## Rejected Signals:
+  tu będzie opis cięć na sygnały
+
+## Compton Edge Calculation:
+  tu będzie opis liczenia comptona
+
+## Energy Cut:
+  Tu będzie opis cięcia sygnałów ze względu na energię (ładunki)
+
+## Compton Edge Temperature and Voltage Dependence
+  Tu będzie opis fitów liniowych i mapy 2D
+
+## Energy and Time Resolution
+  Tu opis fitów do (Q1 + Q2)/2 i czasów
+
+## Uncertainty Calculations
+  Tu będzie obliczanie niepewności
 
 
 
