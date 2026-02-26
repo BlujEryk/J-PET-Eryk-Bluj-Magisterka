@@ -7,7 +7,7 @@ This project is used to analyze data collected using a Caen digitizer DT5743. Th
   - Calculation of the compton edge dependence factor on temperature / voltage
   - Energy and time resolution calculation
 
-##Signal parameters:
+## Signal parameters:
   Every collected signal undergo the following procedure:
     1. Baseline calculation and signal correction
     2. $\pm \sigma_{200}$ region calculation
