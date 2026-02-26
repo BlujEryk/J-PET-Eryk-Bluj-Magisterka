@@ -3,14 +3,16 @@ import matplotlib.pyplot as plt
 
 class Signal:
     
+
     def __init__(self, raw_waveform, sampling_time):
         self.raw_waveform = raw_waveform
         self.sampling_time = sampling_time
-
         self.all_variables_computed = False
+
 
     def Compute_Baseline(self):
         self.baseline = np.sum(self.raw_waveform[:200])/200
+
 
     def Compute_Corrected_Waveform(self):
         waveform = []
@@ -18,13 +20,16 @@ class Signal:
             waveform.append(self.raw_waveform[i] - self.baseline)
         self.waveform = waveform
 
+
     def Compute_Standard_Deviation(self):
         self.standard_deviation = np.std(self.waveform[:200])
+
 
     def Compute_Amplitude(self):
         self.amplitude_value = np.min(self.waveform)
         self.amplitude_index = np.argmin(self.waveform)
         self.amplitude_time = self.amplitude_index*self.sampling_time
+
 
     def Compute_Edges(self):
         i = 0
@@ -65,6 +70,7 @@ class Signal:
 
         self.detection_time = self.rising_01_time
 
+
     def Compute_First_Points_Over_Sigma(self):
         i = 0
         for value in self.waveform[self.amplitude_index::-1]:
@@ -84,15 +90,19 @@ class Signal:
                 break
             i = i + 1
 
+
     def Compute_Edges_Lenghts(self):
             self.rising_lenght = self.rising_09_time - self.rising_01_time
             self.falling_lenght = self.falling_01_time - self.falling_09_time
 
+
     def Compute_Time_Over_Threshold(self):
         self.time_over_threshold = self.falling_01_time - self.rising_01_time 
 
+
     def Compute_Charge(self):
         self.charge_value = np.sum(self.waveform[self.rising_01_index : self.falling_01_index])*self.sampling_time
+
 
     def Compute_All_Variables(self):
         self.Compute_Baseline()
@@ -104,5 +114,4 @@ class Signal:
         self.Compute_Edges_Lenghts()
         self.Compute_Time_Over_Threshold()
         self.Compute_Charge()
-        
         self.all_variables_computed = True

@@ -10,19 +10,11 @@ from Compton_Graph_Saver import *
 
 def Enumerate_files(i, files_path):
     if i < 1:
-        current_path = files_path
-    elif i < 10:
-        current_path = files_path + "_000" + str(i)
-    elif i < 100:
-        current_path = files_path + "_00" + str(i)
-    elif i < 1000:
-        current_path = files_path + "_0" + str(i)
-    elif i < 10000:
-        current_path = files_path + "_" + str(i)
-    else:
+        return files_path
+    if i >= 10000:
         print("File path error!")
         return False
-    return current_path 
+    return f"{files_path}_{i:04d}"
 
 
 def Sampling_time_regex(line):
@@ -50,41 +42,19 @@ def Event_regex(line):
 
 
 def Erase_pdfs():
+    pdf_titles = ["CH0 Amplitudes", "CH1 Amplitudes", "CH0 Charges", "CH1 Charges", "Charge averages", "Time averages", "Time differences", "Compton Edges", "Percentage Compton Edges"]
     writer = PdfWriter()
-    with open("../Results/CH0 Amplitudes.pdf", "wb") as f:
-        writer.write(f)
-    f.close()
-    with open("../Results/CH1 Amplitudes.pdf", "wb") as f:
-        writer.write(f)
-    f.close()
-    with open("../Results/CH0 Charges.pdf", "wb") as f:
-        writer.write(f)
-    f.close()
-    with open("../Results/CH1 Charges.pdf", "wb") as f:
-        writer.write(f)
-    f.close()
-    with open("../Results/Charge averages.pdf", "wb") as f:
-        writer.write(f)
-    f.close()
-    with open("../Results/Time averages.pdf", "wb") as f:
-        writer.write(f)
-    f.close()
-    with open("../Results/Time differences.pdf", "wb") as f:
-        writer.write(f)
-    f.close()
-    with open("../Results/Compton Edges.pdf", "wb") as f:
-        writer.write(f)
-    f.close()
-    with open("../Results/Percentage Compton Edges.pdf", "wb") as f:
-        writer.write(f)
-    f.close()
+    for title in pdf_titles:
+        with open("../Results/" + title + ".pdf", "wb") as f:
+            writer.write(f)
+        f.close()
 
 
 def main():
     Erase_pdfs()
     measurements_list = []
     compton_values = []
-    number_of_files = 10
+    number_of_files = 2
     for i in range(82, 91, 1):
         events_list = Events_List([])
         files_path = "../Data/"+str(i/2)+"V/wavecatcher_run1/wavecatcher_run1_Ascii.dat"
@@ -148,6 +118,9 @@ def main():
     i = 41
     for measurement in measurements_list:
         histograms_saver = Histograms_Saver(measurement, str(i) + "V")
+
+        # histograms_saver.Show_example_waveform(2*i)
+
         compton_value = histograms_saver.Save_Compton_Type_Histograms()
         compton_values.append([i] + compton_value)
         histograms_saver.Charge_averages()

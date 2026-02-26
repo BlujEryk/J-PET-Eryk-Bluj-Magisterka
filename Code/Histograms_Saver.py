@@ -87,7 +87,7 @@ class Histograms_Saver:
         plt.plot(bin_centers, moving_averaged_counts, linewidth = 1, label = "MMP Histogram")
         plt.plot(bin_centers, derivative * scale, linewidth = 1, label = "MMP Histogram derivative")
         plt.plot(x_parabola, y_parabola * scale, linewidth = 1, label = "Parabolic Fit")
-        plt.axvline(x = p, color='black', linestyle='--', linewidth = 1, label = f"Compton Edge = ({p:.5f} +- {sigma_p:.5f})" + " [" + unit + "]")
+        plt.axvline(x = p, color='black', linestyle='--', linewidth = 1, label = f"Compton Edge\n({p:.5f} +- {sigma_p:.5f})" + " [" + unit + "]")
         plt.legend()
 
         plt.savefig("../Results/new_page.pdf")
@@ -235,3 +235,11 @@ class Histograms_Saver:
         with open("../Results/result.pdf", "wb") as f:
             writer.write(f)
         os.replace("../Results/result.pdf", "../Results/Time differences.pdf")
+
+    
+    # def Show_example_waveform(self, x):
+    #     data = self.events_list.events_list[0][0].waveform
+
+    #     with open("sig_" + str(x) + ".txt", "w") as f:
+    #         for value in data:
+    #             f.write(f"{value}\n")
