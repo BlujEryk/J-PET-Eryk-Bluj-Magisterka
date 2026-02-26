@@ -1,4 +1,48 @@
-# NLK Valves Control System
+# Study of the effect of temperature fluctuations on the characteristics of a scintillation detector with a silicon photomultiplier
+
+This project is used to analyze data collected using a Caen digitizer DT5743. The analysis consists of:
+
+  - Single signal parameters calculation
+  - Compton edge position calculation based on charge and amplitude histograms
+  - Calculation of the compton edge dependence factor on temperature / voltage
+  - Energy and time resolution calculation
+
+##Signal parameters:
+  Every collected signal undergo the following procedure:
+    1. Baseline calculation and signal correction
+    2. $\pm \sigma_{200}$ region calculation
+    3. Amplitude value and position calculation
+    4. Calculation of positions of 0.1 and 0.9 of amplitude value
+    5. Rising and falling edge lenght calculation
+    6. Detection tinme calculation
+    7. Charge calculation
+
+  The graph below shows an example of the collected signal:
+  ![here is for readme 1 cannot be displayed for some reason](Images/for_readme_1.png)
+  Baseline **$V_{B}$** is calculated as a aritmetic mean of first 200 voltage values. Then **$V_{B}$** is substracted from every point in a signal. Thanks to that whole signal is shifted by **$V_{B}$** upwards or downwards and the baseline of such corrected signal becomes 0.
+  ![here is for readme 2 cannot be displayed for some reason](Images/for_readme_2.png)
+  In the next step **$\sigma_{200}$** standard devation of 200 first voltage values is calculated as shown above. **$\pm \sigma_{200}$** region is treated as a noise region and is used later to find the signal detection time and to eliminate signals that are to noisy.
+  ![here is for readme 3 cannot be displayed for some reason](Images/for_readme_3.png)
+  Then the amplitude **A**  is determined as the maximum value of the signal and **T_{A}** as its position. The amplitude values ​​of 0.1 and 0.9 are also calculated and then used to find the rising and falling edges lengths.
+  ![here is for readme 4 cannot be displayed for some reason (add T marks on the graph)](Images/for_readme_4.png)
+  Based on that, iterating over subsequent signal points to the left (backwards) starting from **$T_{A}$**, the **$T_{RE}$** and **$T_{RB}$** values ​​are found, respectively, as the position of the first encountered point smaller than 0.9**A** and the position of the last encountered point greater than 0.1**A**. Additionally, **$T_{D}$** is also determined as the position of the last encountered point greater (in modulus) than $\pm \sigma_{200}$. Similarly, by iterating to the right (forward) from **$T_{A}$**, **$T_{FB}$** and $**T_{FE}$** are found, respectively as the position of the the first encountered point smaller than 0.9**A** and the position of the last encountered point greater than 0.1**A**. The individual T values ​​​​stands for:
+  - **$T_{A}$** -- Amplitude position
+(marked in green on the graph)
+  - **$T_{RB}$** -- Rising edge beginning
+  - **$T_{RE}$** -- Rising edge end
+  - **$T_{FB}$** -- Falling edge beginning
+  - **$T_{FE}$** -- Falling edge end
+(marked in blue on the graph)
+  - **$T_{D}$** -- Detection time
+(marked in red on the graph)
+Rising edge length **$T_{R}$** is then calculated as **$T_{R} = T_{RE} - T_{RB}$** and analogously falling edge lenght **$T_{F}$** is then calculated as **$T_{F} = T_{FE} - T_{FB}$**.
+Finally total charge **$Q$** is calculated as (integral over time) a sum of all voltage values in the signal multiplied by so called sampling time -- time between adjacent points on the graph which is recorded directly by the digitizer.
+  
+  
+    
+
+
+
 
 Tu bedzie ladne readme z opisami po angielsku
 to ponizej jest tu jako moj template
