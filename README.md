@@ -18,13 +18,13 @@ Every collected signal undergo the following procedure:
 7. Charge calculation
 
 The graph below shows an example of the collected signal:
-![here is for readme 1 cannot be displayed for some reason](Images/for_readme_1.png)
+<img src = "Images/for_readme_1.png" width = "500">
 Baseline **$V_{B}$** is calculated as a aritmetic mean of first 200 voltage values. Then **$V_{B}$** is substracted from every point in a signal. Thanks to that whole signal is shifted by **$V_{B}$** upwards or downwards and the baseline of such corrected signal becomes 0.
-![here is for readme 2 cannot be displayed for some reason](Images/for_readme_2.png)
+<img src = "Images/for_readme_2.png" width = "500">
 In the next step **$\sigma_{200}$** standard devation of 200 first voltage values is calculated as shown above. **$\pm \sigma_{200}$** region is treated as a noise region and is used later to find the signal detection time and to eliminate signals that are to noisy.
-![here is for readme 3 cannot be displayed for some reason](Images/for_readme_3.png)
+<img src = "Images/for_readme_3.png" width = "500">
 Then the amplitude **A**  is determined as the maximum value of the signal and **T_{A}** as its position. The amplitude values ​​of 0.1 and 0.9 are also calculated and then used to find the rising and falling edges lengths.
-![here is for readme 4 cannot be displayed for some reason (add T marks on the graph)](Images/for_readme_4.png)
+<img src = "Images/for_readme_4.png" width = "500">
 Based on that, iterating over subsequent signal points to the left (backwards) starting from **$T_{A}$**, the **$T_{RE}$** and **$T_{RB}$** values ​​are found, respectively, as the position of the first encountered point smaller than 0.9**A** and the position of the last encountered point greater than 0.1**A**. Additionally, **$T_{D}$** is also determined as the position of the last encountered point greater (in modulus) than $\pm \sigma_{200}$. Similarly, by iterating to the right (forward) from **$T_{A}$**, **$T_{FB}$** and $**T_{FE}$** are found, respectively as the position of the the first encountered point smaller than 0.9**A** and the position of the last encountered point greater than 0.1**A**. The individual T values ​​​​stands for:
 - **$T_{A}$** -- Amplitude position
 (marked in green on the graph)
