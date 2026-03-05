@@ -53,7 +53,21 @@ Rising edge length **t<sub>R</sub>** is then calculated as **$t_{R} = t_{RE} - t
 Finally total charge **Q** is calculated as (integral over time) a sum of all voltage values in the signal multiplied by so called sampling time -- time between adjacent points on the graph which is recorded directly by the digitizer.
   
 ## Rejected Signals:
-  tu będzie opis cięć na sygnały
+Not all signals recorded by the digitizer have the expected shape and not all of them can be analyzed correctly. Therefore, cuts are introduced to eliminate the influence of such signals. The following signal groups are rejected using cuts:
+1. Signals impossible to analyze
+Signals for which it is physically impossible to calculate all the values described in previous section using described methods. The criterion is simple. If all values expected by the program ​​exist, signal is accepted, otherwise is rejected. Tu będzie przykładowy odrzucony sygnał (przesłąny na teams).
+{zdjęcie}
+tu o przykładzie z amplitudą na ostatnim pkt (nie można iterować do przodu)
+3. Too low signals
+   tu będzie coś o za niskich sygnałach
+4. Too long signals
+  tu będzie coś o za długich sygnałach
+5. Noncoincidental signal
+   tu będzie coś o koincydencjach 
+6. Signals out of energy range
+     tu będzie coś o cięciu 200-350 na ładunkach
+
+  
 
 ## Compton Edge Calculation:
   tu będzie opis liczenia comptona
