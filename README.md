@@ -34,22 +34,22 @@ In the next step **σ<sub>200</sub>** standard devation of 200 first voltage val
   <img src = "Images/for_readme_3.png" width = "500">
 </p>
 
-Then the amplitude **A**  is determined as the maximum value of the signal and **T<sub>A</sub>** as its position. The amplitude values ​​of 0.1 and 0.9 are also calculated and then used to find the rising and falling edges lengths.
+Then the amplitude **A**  is determined as the maximum value of the signal and **t<sub>A</sub>** as its position. The amplitude values ​​of 0.1 and 0.9 are also calculated and then used to find the rising and falling edges lengths.
 <p align="center">
   <img src = "Images/for_readme_4.png" width = "500">
 </p>
 
-Based on that, iterating over subsequent signal points to the left (backwards) starting from **T<sub>A</sub>**, the **T<sub>RE</sub>** and **T<sub>RB</sub>** values ​​are found, respectively, as the position of the first encountered point smaller than 0.9**A** and the position of the last encountered point greater than 0.1**A**. Additionally, **T<sub>D</sub>** is also determined as the position of the last encountered point greater (in modulus) than **±σ<sub>200</sub>**. Similarly, by iterating to the right (forward) from **T<sub>A</sub>**, **T<sub>FB</sub>** and **T<sub>FE</sub>** are found, respectively as the position of the the first encountered point smaller than 0.9**A** and the position of the last encountered point greater than 0.1**A**. The individual **T** values ​​​​stands for:
-- **T<sub>A</sub>** -- Amplitude position
+Based on that, iterating over subsequent signal points to the left (backwards) starting from **t<sub>A</sub>**, the **t<sub>RE</sub>** and **t<sub>RB</sub>** values ​​are found, respectively, as the position of the first encountered point smaller than 0.9**A** and the position of the last encountered point greater than 0.1**A**. Additionally, **t<sub>D</sub>** is also determined as the position of the last encountered point greater (in modulus) than **±σ<sub>200</sub>**. Similarly, by iterating to the right (forward) from **t<sub>A</sub>**, **t<sub>FB</sub>** and **t<sub>FE</sub>** are found, respectively as the position of the the first encountered point smaller than 0.9**A** and the position of the last encountered point greater than 0.1**A**. The individual **T** values ​​​​stands for:
+- **t<sub>A</sub>** -- Amplitude position
 (marked in green on the graph)
-- **T<sub>RB</sub>** -- Rising edge beginning
-- **T<sub>RE</sub>** -- Rising edge end
-- **T<sub>FB</sub>** -- Falling edge beginning
-- **T<sub>FE</sub>** -- Falling edge end
+- **t<sub>RB</sub>** -- Rising edge beginning
+- **t<sub>RE</sub>** -- Rising edge end
+- **t<sub>FB</sub>** -- Falling edge beginning
+- **t<sub>FE</sub>** -- Falling edge end
 (marked in blue on the graph)
-- **T<sub>D</sub>** -- Detection time
+- **t<sub>D</sub>** -- Detection time
 (marked in red on the graph)
-Rising edge length **T<sub>R</sub>** is then calculated as **$T_{R} = T_{RE} - T_{RB}$** and analogously falling edge lenght **T<sub>F</sub>** is then calculated as **$T_{F} = T_{FE} - T_{FB}$**.
+Rising edge length **t<sub>R</sub>** is then calculated as **$t_{R} = t_{RE} - t_{RB}$** and analogously falling edge lenght **t<sub>F</sub>** is then calculated as **$t_{F} = t_{FE} - t_{FB}$**.
 Finally total charge **Q** is calculated as (integral over time) a sum of all voltage values in the signal multiplied by so called sampling time -- time between adjacent points on the graph which is recorded directly by the digitizer.
   
 ## Rejected Signals:
