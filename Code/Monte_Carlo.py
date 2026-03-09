@@ -1,98 +1,84 @@
 import numpy as np
+import scipy as sp
 import matplotlib.pyplot as plt
 import random
+from Theoretical_Energy_Histogram import *
 
-class Q_averages_fitter:
 
-    def __init__(self, Q_averages_histogram, n):
-        self.E = 511
-        self.n = n
-        self.Q_averages_histogram = Q_averages_histogram
-        self.E_deposited = self.Simulate_Mu_With_KN_Weight()
-        self.E_smeared = self.Smear_Energies_By_Detector(self.E_deposited, 1)
-
-    def Compute_E_prime(self, mu):
-        E_prime = self.E / (1 + (self.E / 511)*(1 - mu))
-        return E_prime
+class Monte_Carlo_Fit:
     
-    def Compute_E_deposited(self, mu):
-        E_prime = self.Compute_E_prime(mu)
-        E_deposited = self.E - E_prime
-        return E_deposited
-    
-    def Compute_Klein_Nishina_Weight(self, mu):
-        E_prime = self.Compute_E_prime(mu)
-        KN_weight = ((E_prime / self.E)**2) * ((E_prime / self.E) + (self.E / E_prime) + mu**2 - 1) 
-        return KN_weight
-    
-    def Simulate_Mu_With_KN_Weight(self):
-        maximum_weight = self.Compute_Klein_Nishina_Weight(1)
-        random_mus = np.random.uniform(-1, 1, self.n)
-        random_rs = np.random.uniform(0, maximum_weight, self.n)
-        mus_weight = [self.Compute_Klein_Nishina_Weight(mu) for mu in random_mus]
-        deposited_energies = []
-        for i in range(self.n):
-            if random_rs[i] < mus_weight[i]:
-                deposited_energies.append(self.Compute_E_deposited(random_mus[i]))
-        return deposited_energies
+    def __init__(self, counts, bins_edges, seed=123):
+        random.seed(seed)
+        np.random.seed(seed)
+        self.experimental_counts = counts
+        self.experimental_bin_edges = bins_edges
+        self.number_of_experimental_bins = len(bins_edges) - 1
+        self.number_of_experimental_counts = sum(counts)
+        self.experimental_bin_centers = [(self.experimental_bin_edges[i] + self.experimental_bin_edges[i + 1])/2 for i in range(self.number_of_experimental_bins)]
+        self.theoretical = Theoretical(511, self.number_of_experimental_counts)
+        self.theoretical_counts, self.theoretical_bin_edges = np.histogram(self.theoretical.deposited_energies, bins=self.number_of_experimental_bins)
 
-    def Smear_Energies_By_Detector(self, deposited_energies, beta):
-        sigmas = [beta * np.sqrt(E) for E in deposited_energies]
+
+    def Smear_Energies_By_Beta(self, beta):
+        sigmas = [beta * np.sqrt(E) for E in self.theoretical.deposited_energies]
         smeared_energies = []
-        for i in range(len(deposited_energies)):
-            smeared_energies.append(random.gauss(deposited_energies[i], sigmas[i]))
+        for i in range(len(self.theoretical.deposited_energies)):
+            smeared_energy = random.gauss(self.theoretical.deposited_energies[i], sigmas[i])
+            if smeared_energy >= 0:
+                smeared_energies.append(smeared_energy)
+            # else:
+            #     smeared_energies.append(0)
         return smeared_energies
-
-    def Compute_Chi_squared(experimental_histogram, simulated_histogram, V):
-        errors = []
-        for i in range(len(experimental_histogram)):
-            errors.append(((V * simulated_histogram[i] - experimental_histogram[i])**2) / (V * simulated_histogram[i] + experimental_histogram[i]))
-        return np.sum(errors)
+    
+    
+    def Rescale_Counts_By_V(self, counts, V):
+        rescaled_counts = [count * V for count in counts]
+        return rescaled_counts
+    
+    
+    def Rescale_Bins_By_Alpha(self, bin_edges, alpha):
+        rescaled_bin_edges = [bin_edge * alpha for bin_edge in bin_edges]
+        return rescaled_bin_edges
     
 
-
-
-    # def Fit_parameters(experimental_histogram, bins_edges, fit_range=(200.0, 380.0),
-    #                     n_mc=2_000_000, seed=123,
-    #                     x0=(1.0, 1.0, 1.0), bounds=((0.1, 10.0), (0.01, 50.0), (1e-6, None))):
-        
-
-
-
-
-    #     hist_exp = np.asarray(hist_exp, dtype=float)
-    #     bins_edges = np.asarray(bins_edges, dtype=float)
-    #     centers = 0.5 * (bins_edges[1:] + bins_edges[:-1])
-
-    #     # select bins in fit range (like 200-380 keV in the paper)
-    #     lo, hi = fit_range
-    #     fit_mask = (centers >= lo) & (centers <= hi)
-
-    #     model = KNFitModel(bins_edges=bins_edges, n_mc=n_mc, seed=seed)
-
-    #     def objective(p):
-    #         alpha, beta, V = p
-    #         hsim = model.Nsim_hist(alpha, beta)
-    #         return neyman_chi2(hist_exp[fit_mask], hsim[fit_mask], V)
-
-    #     res = minimize(
-    #         objective,
-    #         x0=np.array(x0, dtype=float),
-    #         bounds=bounds,
-    #         method="L-BFGS-B"
-    #     )
-    #     return res, model
-
-
-
-
-
+    def Compute_Errors(self, x_experimental, x_simulated):
+        try:
+            errors = []
+            for i in range(len(x_experimental)):
+                errors.append(((x_simulated[i] - x_experimental[i])**2) / (x_simulated[i] + x_experimental[i]))
+        except:
+            errors = []
+            for i in range(len(x_simulated)):
+                errors.append(((x_simulated[i] - x_experimental[i])**2) / (x_simulated[i] + x_experimental[i]))
+        return sum(errors)
     
 
-x = Q_averages_fitter(1, 100000)
-E_dep  = x.E_deposited
-E_smear = x.E_smeared
+    def Simulate_Histogram(self, parameters):
+        alpha, beta, V = parameters
+        smeared_energies = self.Smear_Energies_By_Beta(beta)
+        smeared_counts, smeared_bin_edges = np.histogram(smeared_energies, bins = self.number_of_experimental_bins)
+        rescaled_smeared_counts = self.Rescale_Counts_By_V(smeared_counts, V)
+        rescaled_smeared_bin_edges = self.Rescale_Bins_By_Alpha(smeared_bin_edges, alpha)
+        return [rescaled_smeared_counts, rescaled_smeared_bin_edges]
 
-plt.hist(E_dep, bins = 100, alpha = 0.8)
-plt.hist(E_smear, bins = 100, alpha = 0.8)
-plt.show()
+
+    def Compute_Chi_Squared(self, parameters):
+        rescaled_smeared_counts, rescaled_smeared_bin_edges = self.Simulate_Histogram(parameters)
+        counts_error = self.Compute_Errors(self.experimental_counts, rescaled_smeared_counts)
+        bin_edges_error = self.Compute_Errors(self.experimental_bin_edges, rescaled_smeared_bin_edges)
+        return counts_error + bin_edges_error
+    
+    
+    # def Fit_Histogram(self):
+    #     initial_guess = (0.2*self.experimental_bin_edges[-1], 0.8, max(self.experimental_counts) / max(self.theoretical_counts))
+    #     bounds = ((10e-9, 10e9), (10e-9, 10e9), (10e-9, 10e9))
+    #     method = "L-BFGS-B"
+    #     # method = "Powell"
+    #     result = sp.optimize.minimize(self.Compute_Chi_Squared, x0=initial_guess, bounds=bounds, method=method)
+    #     return result
+    
+
+    def Fit_Histogram(self):
+        bounds = ((10e-9, 10e9), (10e-9, 2), (10e-9, 10e9))
+        result = sp.optimize.differential_evolution(self.Compute_Chi_Squared, bounds=bounds, popsize=8)
+        return result

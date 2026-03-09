@@ -6,6 +6,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from pypdf import PdfReader, PdfWriter
 import numpy as np
 import os
+from Monte_Carlo import *
 
 class Histograms_Saver:
     
@@ -120,8 +121,16 @@ class Histograms_Saver:
 
     def Charge_averages(self):
         Charge_averages_list = [-(event[0].charge_value + event[1].charge_value)/2 for event in self.events_list.events_list]
+        counts, bin_edges = np.histogram(Charge_averages_list, bins = 100)
+        monte_carlo = Monte_Carlo_Fit(counts, bin_edges)
+        alpha, beta, V = monte_carlo.Fit_Histogram().x
+        print(alpha, beta, V)
+        fit_counts, fit_bin_edges = monte_carlo.Simulate_Histogram((alpha, beta, V))
+
+
         plt.figure()
-        plt.hist(Charge_averages_list, bins = 100)
+        plt.stairs(fit_counts, fit_bin_edges, fill=False)
+        plt.hist(Charge_averages_list, bins=100)
         plt.title("(Q1 + Q2)/2 histogram for" + self.label)
         plt.xlabel("(Q1 + Q2)/2 (V * ns)")
         plt.ylabel("Counts")

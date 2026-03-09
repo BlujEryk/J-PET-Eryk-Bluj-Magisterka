@@ -6,6 +6,8 @@ from Signal import *
 from Events_List import *
 from Histograms_Saver import *
 from Compton_Graph_Saver import *
+from Monte_Carlo import *
+from Theoretical_Energy_Histogram import *
 
 
 def Enumerate_files(i, files_path):
@@ -54,7 +56,7 @@ def main():
     Erase_pdfs()
     measurements_list = []
     compton_values = []
-    number_of_files = 2
+    number_of_files = 10
     for i in range(82, 91, 1):
         events_list = Events_List([])
         files_path = "../Data/"+str(i/2)+"V/wavecatcher_run1/wavecatcher_run1_Ascii.dat"
