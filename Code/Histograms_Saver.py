@@ -52,7 +52,7 @@ class Histograms_Saver:
         if (title == "CH0 Amplitude") or (title == "CH1 Amplitude"):
             p0 = (1e9, bin_centers[minimum_index], minimum)
             bounds = ((1e6, bin_centers[minimum_index - 2], -3*np.absolute(minimum)), (1e12, bin_centers[minimum_index + 2], +3*np.absolute(minimum)))
-        elif (title == "CH0 Charge") or (title == "CH1 Charge"):
+        elif (title == "CH0 Charge") or (title == "CH1 Charge") or (title == "Charge averages"):
             p0 = (1e6, bin_centers[minimum_index], minimum)
             bounds = ((1, bin_centers[minimum_index - 2], -3*np.absolute(minimum)), (1e9, bin_centers[minimum_index + 2], +3*np.absolute(minimum)))
         else:
@@ -122,7 +122,7 @@ class Histograms_Saver:
     def Charge_averages(self):
         Charge_averages_list = [-(event[0].charge_value + event[1].charge_value)/2 for event in self.events_list.events_list]
         counts, bin_edges = np.histogram(Charge_averages_list, bins = 100)
-        monte_carlo = Monte_Carlo_Fit(counts, bin_edges)
+        monte_carlo = Monte_Carlo(counts, bin_edges)
         alpha, beta, V = monte_carlo.Fit_Histogram().x
         print(alpha, beta, V)
         fit_counts, fit_bin_edges = monte_carlo.Simulate_Histogram((alpha, beta, V))

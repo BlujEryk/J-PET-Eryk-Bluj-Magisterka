@@ -2,10 +2,10 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import random
-from Theoretical_Energy_Histogram import *
+from Theoretical import *
 
 
-class Monte_Carlo_Fit:
+class Monte_Carlo:
     
     def __init__(self, counts, bins_edges, seed=123):
         random.seed(seed)
@@ -26,8 +26,8 @@ class Monte_Carlo_Fit:
             smeared_energy = random.gauss(self.theoretical.deposited_energies[i], sigmas[i])
             if smeared_energy >= 0:
                 smeared_energies.append(smeared_energy)
-            # else:
-            #     smeared_energies.append(0)
+            else:
+                smeared_energies.append(0)
         return smeared_energies
     
     

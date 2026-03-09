@@ -22,7 +22,7 @@ class Theoretical:
     
     def Compute_Klein_Nishina_Weight(self, mu):
         E_prime = self.Compute_E_prime(mu)
-        KN_weight = ((E_prime / self.E)**2) * ((E_prime / self.E) + (self.E / E_prime) + mu**2 - 1) 
+        KN_weight = ((E_prime / self.E)**2) * ((E_prime / self.E) + (self.E / E_prime) + mu**2 - 1)
         return KN_weight
     
 

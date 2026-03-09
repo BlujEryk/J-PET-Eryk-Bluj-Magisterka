@@ -1,4 +1,5 @@
 import numpy as np
+from Histograms_Saver import *
 
 class Events_List:
     
@@ -24,7 +25,13 @@ class Events_List:
         # prawy i lewy prog do pozmieniania (ps)
 
 
-    def Execute_All_Cuts(self):
+    def Cut_Charges_In_Range_200_380(self, bound_200, bound_380):
+        self.events_list = [event for event in self.events_list if ((event[0].charge_value >= bound_200) and (event[1].charge_value >= bound_200) and (bound_380 >= event[0].charge_value) and (bound_380 >= event[1].charge_value))]
+        # self.events_list_200_380 = [event for event in self.events_list if ((event[0].charge_value >= bound_200) and (event[1].charge_value >= bound_200) and (bound_380 >= event[0].charge_value) and (bound_380 >= event[1].charge_value))]
+        # return self.events_list_200_380
+
+
+    def Execute_Preliminary_Cuts(self):
         self.Cut_When_Not_All_Variables_Were_Computed()
         self.Cut_Low_Amplitudes()
         self.Cut_Too_Long_Signals()

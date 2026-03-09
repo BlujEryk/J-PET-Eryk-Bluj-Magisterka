@@ -7,7 +7,7 @@ from Events_List import *
 from Histograms_Saver import *
 from Compton_Graph_Saver import *
 from Monte_Carlo import *
-from Theoretical_Energy_Histogram import *
+from Theoretical import *
 
 
 def Enumerate_files(i, files_path):
@@ -112,7 +112,7 @@ def main():
                     current_line = current_file.readline()
                 current_sampling_time = 0
 
-        events_list.Execute_All_Cuts()
+        events_list.Execute_Preliminary_Cuts()
         measurements_list.append(events_list)
         events_list = Events_List([])
 
