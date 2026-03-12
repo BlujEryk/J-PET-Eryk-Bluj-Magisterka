@@ -68,7 +68,7 @@ Tu będzie zdj za długiego sygnału
 Assuming that the detector consists of one scintillator and two photomultipliers (one on each side), a single event can be registered in both of them. 
    tu będzie coś o koincydencjach 
 6. Signals out of energy range
-     tu będzie coś o cięciu 200-350 na ładunkach
+     tu będzie coś o cięciu 200-380 na ładunkach
 
   
 
