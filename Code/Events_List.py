@@ -1,5 +1,6 @@
 import numpy as np
 from Histograms_Saver import *
+from Histogram import *
 
 class Events_List:
     
@@ -25,10 +26,20 @@ class Events_List:
         # prawy i lewy prog do pozmieniania (ps)
 
 
-    def Cut_Charges_In_Range_200_380(self, bound_200, bound_380):
+    def Cut_Charges_In_Range_200_380(self):
+        charge_averages = [(event[0].charge_value + event[1].charge_value)/2 for event in self.events_list]
+        charge_average_histogram = Charge_Average_Histogram(charge_averages, 100)
+        bound_200, bound_380 = charge_average_histogram.Compute_Energy_Boundries()
         self.events_list = [event for event in self.events_list if ((event[0].charge_value >= bound_200) and (event[1].charge_value >= bound_200) and (bound_380 >= event[0].charge_value) and (bound_380 >= event[1].charge_value))]
         # self.events_list_200_380 = [event for event in self.events_list if ((event[0].charge_value >= bound_200) and (event[1].charge_value >= bound_200) and (bound_380 >= event[0].charge_value) and (bound_380 >= event[1].charge_value))]
         # return self.events_list_200_380
+
+
+    # def Create_Histogram_Dictionary(self):
+    #     self.histogram_dictionary = {'CH0 Amplitudes': Amplitude_Histogram(),
+    #                                 'CH1 Amplitudes': 'wartosc2',
+    #                                 }
+    #     , "CH0 Charges", "CH1 Charges", "Charge averages", "Time averages", "Time differences", "Compton Edges", "Percentage Compton Edges"]
 
 
     def Execute_Preliminary_Cuts(self):
