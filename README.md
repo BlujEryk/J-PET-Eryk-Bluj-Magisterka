@@ -65,8 +65,8 @@ Tu  będzie zdj za niskiego sygnału
 Signals for which last measured value **V<sub>end</sub>** is still part of the signal, not noise. The criterion is **|V<sub>end</sub>| < |σ<sub>200</sub>|**. Example signal rejected by this criterion is depicted below.
 Tu będzie zdj za długiego sygnału
 4. Noncoincidental signal
-Assuming that the detector consists of one scintillator and two photomultipliers (one on each side), a single event can be registered in both of them. 
-   tu będzie coś o koincydencjach 
+Assuming that the detector consists of one scintillator and two photomultipliers (one on each side), a single event can be registered in both of them. Therefore, if one wants to treat the measurements from both photomultipliers as one event, the coincidence between them has to be taken into account. Due to this, all pairs of signals for which the difference in detection times is greater than some arbitrarily imposed value are also rejected. So the criterion is **||t<sub>D1</sub> - t<sub>D2</sub>| - t<sub>shift</sub>| < Δt<sub>max</sub>**, where **t<sub>D1</sub>** and **t<sub>D2</sub>** are signal detection times respectively for channel 1 and channel 2 (left and right photomultipliers). Variables **t<sub>shift</sub>** and **Δt<sub>max</sub>** are arbitrarily imposed and should be estimated experimentally. Their values ​​depend on the structure of the experimental setup (scintillator length and readout cable length). These values ​​can be estimated using the histogram of the **t<sub>D1</sub> - t<sub>D2</sub>** differences as the peak position and its width, respectively.
+tu będzie przykład takiego histogramu i przykład odrzuconych sygnałów (jeden nałożony na drugi z zaznaczonymi czasami i maksymalną różnicą)
 6. Signals out of energy range
      tu będzie coś o cięciu 200-380 na ładunkach
 
