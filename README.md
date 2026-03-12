@@ -58,11 +58,14 @@ Not all signals recorded by the digitizer have the expected shape and not all of
 Signals for which it is physically impossible to calculate all the values described in previous section using described methods. The criterion is simple. If all values expected by the program ​​exist, signal is accepted, otherwise is rejected. Tu będzie przykładowy odrzucony sygnał (przesłąny na teams).
 {zdjęcie}
 tu o przykładzie z amplitudą na ostatnim pkt (nie można iterować do przodu)
-3. Too low signals
-   tu będzie coś o za niskich sygnałach
-4. Too long signals
-  tu będzie coś o za długich sygnałach
-5. Noncoincidental signal
+2. Too low signals
+Signals for which signal to noise ratio is lower than 3.  The criterion is **|A| > 3|σ<sub>200</sub>|**. Example signal rejected by this criterion is depicted below.
+Tu  będzie zdj za niskiego sygnału
+3. Too long signals
+Signals for which last measured value **V<sub>end</sub>** is still part of the signal, not noise. The criterion is **|V<sub>end</sub>| < |σ<sub>200</sub>|**. Example signal rejected by this criterion is depicted below.
+Tu będzie zdj za długiego sygnału
+4. Noncoincidental signal
+Assuming that the detector consists of one scintillator and two photomultipliers (one on each side), a single event can be registered in both of them. 
    tu będzie coś o koincydencjach 
 6. Signals out of energy range
      tu będzie coś o cięciu 200-350 na ładunkach
@@ -258,6 +261,6 @@ The valves and signals are connected to specific pins:
 ---
 
 ## Contact details
-  - If you have any qyestions or would like me to make any changes, here are my contact details:
+  - If you have any questions or would like me to make any changes, here are my contact details:
   - erykbluj@gmail.com
   - +48 668 727 367
